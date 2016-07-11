@@ -4,6 +4,11 @@ describe Oystercard do
 
   it {is_expected.to respond_to(:balance)}
   it {is_expected.to respond_to(:exceeds_limit?).with(1).argument}
+  it {is_expected.to respond_to(:deduct).with(1).argument}
+
+  it 'should deduct fare from the balance' do
+    expect {subject.deduct 5}.to change {subject.balance}.by -5
+  end
 
   it 'shows the initial balance of the card' do
     expect(subject.balance).to eq 0

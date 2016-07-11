@@ -17,6 +17,11 @@ class Oystercard
     "Your balance is now £#{balance}"
   end
 
+  def deduct(fare)
+    @balance -= fare
+    "Your balance is now £#{balance}"
+  end
+
   def exceeds_limit?(amount)
     @balance + amount > limit
   end
