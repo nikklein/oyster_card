@@ -4,7 +4,8 @@ describe OysterCard do
   subject(:oystercard) { described_class.new }
 
   it { is_expected.to(respond_to(:balance)) }
-  it { is_expected.to (respond_to(:top_up).with(1).argument) }
+  it { is_expected.to(respond_to(:top_up).with(1).argument) }
+  it { is_expected.to(respond_to(:deduct).with(1).argument) }
 
   describe '#balance' do
     it 'has a balance of zero' do
@@ -18,6 +19,13 @@ describe OysterCard do
     end
     it 'raises an error if the top up will take the balance over £90' do
       expect{ oystercard.top_up(100) }.to(raise_error("Balance cannot exceed £90"))
+    end
+  end
+
+  describe '#deduct' do
+    it 'deduct money from the balance' do
+      oystercard.top_up 10
+      expect{ oystercard.deduct 5}.to change{ oystercard.balance }.by -5 
     end
   end
 
