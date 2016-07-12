@@ -2,6 +2,7 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) {described_class.new}
+  let(:station) {double :station}
   CREDIT = 10
 
   describe 'initialize' do
@@ -31,13 +32,18 @@ describe Oystercard do
   describe '#touch_in' do
     it "touches in" do
       subject.top_up(CREDIT)
-      subject.touch_in
+      subject.touch_in(station)
       expect(subject).to be_in_journey
     end
 
     it "raises an error if balance is less than minimum fare" do
-      expect {subject.touch_in}.to raise_error "Insufficent funds"
+      expect {subject.touch_in(station)}.to raise_error "Insufficent funds"
+    end
 
+    it "stores the entry station" do
+      subject.top_up(CREDIT)
+      subject.touch_in(station)
+      expect(subject.entry_station).to eq station
     end
   end
 
@@ -46,7 +52,7 @@ describe Oystercard do
 before(:each)do
 @minimum_fare = Oystercard::MINIMUM_FARE
 subject.top_up(CREDIT)
-subject.touch_in
+subject.touch_in(station)
 subject.touch_out
 end
 
