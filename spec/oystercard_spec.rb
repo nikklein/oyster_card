@@ -5,8 +5,8 @@ describe Oystercard do
 
   describe 'initialize' do
 
-    it 'check new card has balance 0' do
-      expect(subject.balance).to eq(0)
+    it 'check new card\'s balance' do
+      expect(subject.balance).to eq(DEFAULT_BALANCE)
     end
 
   end
