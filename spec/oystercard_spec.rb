@@ -19,5 +19,11 @@ describe Oystercard do
 
       end
 
+      it 'will not allow a balance greater than 90' do
+        maximum_balance = Oystercard::MAXIMUM_BALANCE
+        subject.top_up(maximum_balance)
+        expect {subject.top_up(1)}.to raise_error "Balance can not be greater than #{maximum_balance}"
+      end
+
   end
 end
