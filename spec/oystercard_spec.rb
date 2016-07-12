@@ -24,6 +24,7 @@ describe Oystercard do
       expect{subject.top_up 10}.to change {subject.balance}.by 10
     end
 
+
     it "raises an error when top up exceeds card limit: #{Oystercard::MAXIMUM_BALANCE}" do
       subject.top_up Oystercard::MAXIMUM_BALANCE
       expect{subject.top_up 1}.to raise_error "Maximum balance of #{Oystercard::MAXIMUM_BALANCE} exceeded"
@@ -41,13 +42,20 @@ describe Oystercard do
 
   describe '#touch_in' do
     it 'returns true (in journey) when touched in' do
+      subject.top_up 10
       subject.touch_in
       expect(subject).to be_in_journey
     end
+
+    it "raises an error if balance is below #{Oystercard::MINIMUM_BALANCE}" do
+      expect {subject.touch_in}.to raise_error "Insufficient funds. Minimum balance: #{Oystercard::MINIMUM_BALANCE}"
+    end
+
   end
 
   describe '#touch_out' do
     it 'returns false (in journey) when touched out' do
+      subject.top_up 10
       subject.touch_in
       subject.touch_out
       expect(subject).not_to be_in_journey
