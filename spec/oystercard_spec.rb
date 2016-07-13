@@ -5,7 +5,7 @@ describe Oystercard do
   let(:entry_station) {double :station}
   let(:exit_station) {double :station}
   credit = 10
-  minimum_fare = Oystercard::MINIMUM_FARE
+  minimum_fare = Journey::MINIMUM_FARE
 
   describe 'initialize' do
 
@@ -45,11 +45,7 @@ end
       expect {subject.touch_in(entry_station)}.to raise_error "Insufficent funds"
     end
 
-    it "stores the entry station" do
-      subject.top_up(credit)
-      subject.touch_in(entry_station)
-      expect(subject.entry_station).to eq entry_station
-    end
+
   end
 
   describe '#touch_out' do
