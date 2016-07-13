@@ -19,6 +19,7 @@ class OysterCard
 
   def in_journey?
     @journeys.any in_journey?
+    #enumerable any?
   end
 
   def touch_in(station)
