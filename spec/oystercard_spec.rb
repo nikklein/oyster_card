@@ -1,4 +1,5 @@
 require 'oystercard'
+require 'journey'
 
 describe OysterCard do
   subject(:card) {described_class.new}
@@ -74,4 +75,5 @@ describe OysterCard do
       expect(card.journeys).to include journey
     end
   end
+
 end
