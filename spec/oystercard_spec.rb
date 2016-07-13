@@ -3,7 +3,8 @@ require 'oystercard'
 describe Oystercard do
   subject(:card) {described_class.new}
   let(:station) {double :station}
-  CREDIT = 10
+  credit = 10
+  minimum_fare = Oystercard::MINIMUM_FARE
 
   describe 'initialize' do
 
@@ -17,7 +18,8 @@ describe Oystercard do
       it { is_expected.to respond_to(:top_up).with(1).argument}
 
       it 'increases the balance by the top up amount' do
-        expect{subject.top_up(CREDIT)}.to change{ subject.balance }.by CREDIT
+
+        expect{subject.top_up(credit)}.to change{ subject.balance }.by credit
 
       end
 
@@ -31,7 +33,7 @@ describe Oystercard do
 
   describe '#touch_in' do
     it "touches in" do
-      subject.top_up(CREDIT)
+      subject.top_up(credit)
       subject.touch_in(station)
       expect(subject).to be_in_journey
     end
@@ -41,7 +43,7 @@ describe Oystercard do
     end
 
     it "stores the entry station" do
-      subject.top_up(CREDIT)
+      subject.top_up(credit)
       subject.touch_in(station)
       expect(subject.entry_station).to eq station
     end
@@ -49,19 +51,18 @@ describe Oystercard do
 
   describe '#touch_out' do
 
-before(:each)do
-@minimum_fare = Oystercard::MINIMUM_FARE
-subject.top_up(CREDIT)
-subject.touch_in(station)
-subject.touch_out
-end
+    before(:each)do
+      subject.top_up(credit)
+      subject.touch_in(station)
+      subject.touch_out
+    end
 
     it "touches out" do
       expect(subject).not_to be_in_journey
     end
 
     it "deducts fare" do
-      expect{subject.touch_out}.to change{subject.balance}.by(- @minimum_fare)
+      expect{subject.touch_out}.to change{subject.balance}.by(- minimum_fare)
     end
   end
 
