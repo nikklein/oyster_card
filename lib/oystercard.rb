@@ -9,7 +9,7 @@ class OysterCard
 
   def initialize(balance = 0)
     @balance = balance
-    @journeys = Array.new
+    @journeys = []
   end
 
   def top_up amount
@@ -18,20 +18,20 @@ class OysterCard
   end
 
   def in_journey?
-    @journey.in_journey?
+    @journeys.any in_journey?
   end
 
   def touch_in(station)
     fail "Card has insufficient balance" if @balance < MINIMUM_BALANCE
-    @journey = Journey.new
-    @journeys << @journey
-    @journey.begining_station(station)
+    journey = Journey.new
+    journey.begining_station(station)
+
+    @journeys << journey
   end
 
   def touch_out(station)
     deduct MINIMUM_FARE
-    @journey.final_station(station)
-    @journey = nil
+    @journeys.last.final_station(station)
   end
 
   private

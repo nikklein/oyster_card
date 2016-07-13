@@ -1,21 +1,18 @@
 
 
 class Journey
-
-  attr_reader :journeys
-
+    attr_reader :begining_station, :final_station
 
     def in_journey?
-      !@journeys.last.include?(:exit_station)
+      @final_station.nil?
     end
 
     def begining_station(station)
-      @journeys << {entry_station: station}
-      station
+      @begining_station = station
     end
 
     def final_station(station)
-      @journeys.last.store(:exit_station, station)
+      @final_station = station
     end
 
 end
