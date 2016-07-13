@@ -2,7 +2,8 @@ require 'oystercard'
 
 describe Oystercard do
   subject(:card) {described_class.new}
-  let(:station) {double :station}
+  let(:entry_station) {double :station}
+  let(:exit_station) {double :station}
   credit = 10
   minimum_fare = Oystercard::MINIMUM_FARE
 
@@ -11,7 +12,9 @@ describe Oystercard do
     it 'check new card\'s balance' do
       expect(subject.balance).to eq(Oystercard::DEFAULT_BALANCE)
     end
-
+it 'checks that card has empty journey history' do
+  expect(subject.journey_history).to be_empty
+end
   end
 
   describe '#top_up' do
@@ -34,35 +37,42 @@ describe Oystercard do
   describe '#touch_in' do
     it "touches in" do
       subject.top_up(credit)
-      subject.touch_in(station)
+      subject.touch_in(entry_station)
       expect(subject).to be_in_journey
     end
 
     it "raises an error if balance is less than minimum fare" do
-      expect {subject.touch_in(station)}.to raise_error "Insufficent funds"
+      expect {subject.touch_in(entry_station)}.to raise_error "Insufficent funds"
     end
 
     it "stores the entry station" do
       subject.top_up(credit)
-      subject.touch_in(station)
-      expect(subject.entry_station).to eq station
+      subject.touch_in(entry_station)
+      expect(subject.entry_station).to eq entry_station
     end
   end
 
   describe '#touch_out' do
 
+    it 'checks that just one journey was created' do
+      subject.top_up(credit)
+      subject.touch_in(entry_station)
+      expect{subject.touch_out(exit_station)}.to change{subject.journey_history.size}.by(1)
+    end
+
     before(:each)do
       subject.top_up(credit)
-      subject.touch_in(station)
-      subject.touch_out
+      subject.touch_in(entry_station)
+      subject.touch_out(exit_station)
     end
+
 
     it "touches out" do
       expect(subject).not_to be_in_journey
     end
 
     it "deducts fare" do
-      expect{subject.touch_out}.to change{subject.balance}.by(- minimum_fare)
+      expect{subject.touch_out(exit_station)}.to change{subject.balance}.by(- minimum_fare)
     end
   end
 
