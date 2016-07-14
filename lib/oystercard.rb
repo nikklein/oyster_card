@@ -6,36 +6,53 @@ class OysterCard
   MAXIMUM_BALANCE = 90
   MINIMUM_BALANCE = 1
   MINIMUM_FARE    = 1
+  PENALTY_FARE    = 6
 
   def initialize(balance = 0)
     @balance = balance
-    @journeys = []
+    @journey_log = []
+
   end
 
   def top_up amount
-    fail "Max balance of £#{MAXIMUM_BALANCE} exceeded" if amount + balance > MAXIMUM_BALANCE
+    fail max_balance_message if amount + balance > MAXIMUM_BALANCE
     @balance += amount
   end
 
-
-
   def touch_in(station)
-    fail "Card has insufficient balance" if @balance < MINIMUM_BALANCE
-    journey = Journey.new
-    journey.begining_station(station)
-
-    @journeys << journey
-    station 
+    fail min_balance_message if min_balance?
+    new_journey.begining_station(station)
+    @journey_log << journey
+    station
   end
 
   def in_journey?
-    @journeys[-1].in_journey?
+    @journey_log[-1].in_journey?
 
   end
 
   def touch_out(station)
+    if new_journey.empty?
+      new_journey
+    #journey2 = Journey.new if @journeys.nil?
     deduct MINIMUM_FARE
-    @journeys.last.final_station(station)
+    @journey_log.last.final_station(station)
+  end
+
+  def new_journey
+    journey = Journey.new
+  end
+
+  def min_balance_message
+    "Card has insufficient balance"
+  end
+
+  def max_balance_message
+    "Max balance of £#{MAXIMUM_BALANCE} exceeded"
+  end
+
+  def min_balance?
+    @balance < MINIMUM_BALANCE
   end
 
   private
