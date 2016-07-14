@@ -1,4 +1,4 @@
-require_relative 'oystercard'
+require './lib/oystercard'
 
 card = OysterCard.new
 card.top_up(50)

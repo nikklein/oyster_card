@@ -67,12 +67,13 @@ describe OysterCard do
       expect(card.journeys).to be_empty
     end
 
-    let(:journey){ {entry_station: station, exit_station: station} }
+    let(:journey){ {begining_station: station, final_station: station} }
 
     it 'stores a journey' do
+
       card.touch_in(station)
       card.touch_out(station)
-      expect(card.journeys).to include journey
+      expect(card.journeys.size).to eq(1)
     end
   end
 

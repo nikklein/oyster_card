@@ -3,6 +3,9 @@
 class Journey
     attr_reader :begining_station, :final_station
 
+    def initialize
+      @final_station = nil
+    end
     def in_journey?
       @final_station.nil?
     end
