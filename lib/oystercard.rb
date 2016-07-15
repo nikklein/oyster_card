@@ -1,4 +1,5 @@
-require_relative 'journey'
+require './lib/journey'
+require_relative 'journeylog'
 
 class OysterCard
   attr_reader :balance, :entry_station, :journey
@@ -10,8 +11,7 @@ class OysterCard
 
   def initialize(balance = 0)
     @balance = balance
-    @journey = Journey.new
-
+    @journeylog = JourneyLog.new
   end
 
   def top_up amount
@@ -25,20 +25,13 @@ class OysterCard
     if !@journey.journey.empty?
       deduct(PENALTY_FARE)
     end
-    @journey.start_station(station)
+    @journeylog.start(station)
     end
 
 
   def touch_out(station)
     @journey.final_station(station)
     deduct @journey.fare
-
-  end
-
-
-  def in_journey?
-    @journey.in_journey?
-
   end
 
   private
@@ -47,7 +40,6 @@ class OysterCard
       @balance -= amount
       @journey.journey_history << @journey.journey
       reset
-
   end
 
   def reset
@@ -55,6 +47,5 @@ class OysterCard
       @journey.entry_station = nil
       @journey.exit_station = nil
   end
-
 
 end
