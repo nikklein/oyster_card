@@ -27,7 +27,6 @@ describe OysterCard do
   end
 
 
-
 describe '#touch_in' do
 
     it 'Adds start station' do

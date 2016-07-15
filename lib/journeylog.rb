@@ -17,7 +17,6 @@ class JourneyLog
   def finish(station)
     @exit_station = current_journey_method.final_station(station)
     @journeys << @current_journey
-    
   end
 
   private

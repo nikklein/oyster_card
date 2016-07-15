@@ -23,6 +23,15 @@ class Journey
     end
 
     def fare
-      complete? ? OysterCard::MINIMUM_FARE : OysterCard::PENALTY_FARE
+      if complete?
+        if @entry_station.zone > @exit_station.zone
+          (@entry_station.zone + @exit_station.zone) - 1
+        else
+          (@exit_station.zone - @entry_station.zone) + 1
+        end
+      else
+        OysterCard::PENALTY_FARE
+      end
     end
+
 end

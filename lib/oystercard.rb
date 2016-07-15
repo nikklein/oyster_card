@@ -1,5 +1,6 @@
 require './lib/journey'
 require_relative 'journeylog'
+require_relative 'station'
 
 class OysterCard
   attr_reader :balance, :entry_station, :journey, :journeylog
@@ -26,6 +27,10 @@ class OysterCard
       deduct(PENALTY_FARE)
     end
     @journeylog.start(station)
+  end
+
+  def journeys
+    @journeylog.journeys.dup
   end
 
 
