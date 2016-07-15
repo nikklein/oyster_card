@@ -15,20 +15,21 @@ class OysterCard
   end
 
   def top_up amount
-    fail "Max balance of £#{MAXIMUM_BALANCE} exceeded" if amount + balance > MAXIMUM_BALANCE
+    fail_mesage = "Max balance of £#{MAXIMUM_BALANCE} exceeded"
+    fail fail_mesage if amount + balance > MAXIMUM_BALANCE
     @balance += amount
   end
 
   def touch_in(station)
     fail "Card has insufficient balance" if @balance < MINIMUM_BALANCE
-    return deduct @journey.fare if !@journey.journey.empty?
+    if !@journey.journey.empty?
+      deduct(PENALTY_FARE)
+    end
     @journey.start_station(station)
-
-  end
+    end
 
 
   def touch_out(station)
-    #return deduct @journey.fare if @journey.journey.empty?
     @journey.final_station(station)
     deduct @journey.fare
 
@@ -45,12 +46,15 @@ class OysterCard
   def deduct amount
       @balance -= amount
       @journey.journey_history << @journey.journey
-      @journey.journey = {}
-      #@entry_station = nil
-      #@exit_station = nil
+      reset
+
   end
 
-
+  def reset
+      @journey.journey = {}
+      @journey.entry_station = nil
+      @journey.exit_station = nil
+  end
 
 
 end

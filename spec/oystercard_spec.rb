@@ -26,59 +26,42 @@ describe OysterCard do
     end
   end
 
+
+
+describe '#touch_in' do
+
+    it 'Adds start station' do
+    subject.top_up(10)
+    subject.touch_in(station)
+    expect(subject.journey.entry_station).to eq station
+    end
+
     it 'raises an error if card has insufficient balance' do
         message = "Card has insufficient balance"
         expect{card.touch_in(station)}.to raise_error message
-      end
+    end
 
-describe 'touch_in' do
-  it 'creates a journey and adds start station' do
-    subject.top_up(10)
-    expect(subject.touch_in(station)).to eq station
+    it 'when touched in twice it charges penalty fare' do
+      subject.top_up 20
+      subject.touch_in station
+      expect{ subject.touch_in(station) }.to change{ subject.balance }.by(-OysterCard::PENALTY_FARE)
     end
 end
 
-#charge on touch out
-#subject.touch_in
-#expect{ subject.touch_out }.to change{ subject.balance }.by(-Oystercard::MINIMUM_CHARGE)
-  #  describe '#deduct'
+ describe '#touch_out' do
+    it 'when touched out twice it charges penalty fare' do
+      subject.top_up 20
+      subject.touch_out station
+      expect{ subject.touch_out(station) }.to change{ subject.balance }.by(-OysterCard::PENALTY_FARE)
 
-  #  it 'when touch_out it deducts amount' do
-  #    card.touch_in(station)
-  #    min_fare = OysterCard::MINIMUM_FARE
-  #    expect{card.touch_out(station)}.to change{card.balance}.by(- min_fare )
-  #  end
+ end
 
+    it 'when you complete a journey charges minimum fare' do
+      subject.top_up 20
+      subject.touch_in station
+      expect{ subject.touch_out(station) }.to change{ subject.balance }.by(-OysterCard::MINIMUM_FARE)
+    end
+end
 
-  #  it 'can touch in' do
-  #    card.touch_in(station)
-  #    expect(card).to be_in_journey
-#    end
-
-
-#    it 'can touch out' do
-#      card.touch_in(station)
-#      card.touch_out(station)
-#      expect(card).not_to be_in_journey
-#    end
-
-
-  #  it 'stores the station entry' do
-  #    expect(card.touch_in(station)).to eq station
-  #  end
-
-  #  it 'has an empty list of journeys by default' do
-  #    expect(card.journeys).to be_empty
-  #  end
-
-  #  let(:journey){ {begining_station: station, final_station: station} }
-
-  #  it 'stores a journey' do
-
-  #    card.touch_in(station)
-  #    card.touch_out(station)
-  #    expect(card.journeys.size).to eq(1)
-  #  end
-  #end
 
 end
