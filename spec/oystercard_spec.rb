@@ -33,7 +33,7 @@ describe '#touch_in' do
     it 'Adds start station' do
     subject.top_up(10)
     subject.touch_in(station)
-    expect(subject.journey.entry_station).to eq station
+    expect(subject.journeylog.current_journey.entry_station).to eq station
     end
 
     it 'raises an error if card has insufficient balance' do

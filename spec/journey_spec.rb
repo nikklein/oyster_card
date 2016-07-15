@@ -17,15 +17,5 @@ describe 'Journey' do
        expect(subject.fare).to eq 6
      end
 
-  it 'returns penalty fair if journey did not start' do
-     expect(subject.fare).to eq 6
-   end
-
-  it 'returns penaly fare if journey did not end' do
-    subject.start_station(station)
-    expect(subject.fare).to eq 6
-
-    end
-
   end
 end
